@@ -2,6 +2,10 @@
 
 A Telegram bot that parses a website URL and returns emails, phone numbers, social links, metadata, and lists of images, videos, and files. Users can control which content types are returned via settings.
 
+## Try the bot:
+
+https://t.me/landgrafparserbot
+
 ## Installation
 
 1. Clone the repository:
