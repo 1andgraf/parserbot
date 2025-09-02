@@ -179,10 +179,6 @@ def format_result(result: dict):
     return "\n".join(lines)
 
 def split_message_safe(text: str, limit: int = 3900):
-    """
-    Splits the text into chunks not exceeding the limit,
-    splitting on line boundaries to avoid breaking Markdown formatting.
-    """
     lines = text.splitlines(keepends=True)
     chunks = []
     current_chunk = ""
@@ -192,7 +188,6 @@ def split_message_safe(text: str, limit: int = 3900):
                 chunks.append(current_chunk)
                 current_chunk = line
             else:
-                # single line longer than limit, force split
                 chunks.append(line[:limit])
                 current_chunk = line[limit:]
         else:
@@ -227,7 +222,7 @@ def build_settings_keyboard(user_id: int):
 async def callback_scan_url(callback_query: types.CallbackQuery):
     await callback_query.answer()
     try:
-        await callback_query.message.delete()   # remove the start menu
+        await callback_query.message.delete()
     except Exception:
         pass
     keyboard = InlineKeyboardMarkup()
@@ -241,7 +236,7 @@ async def callback_scan_url(callback_query: types.CallbackQuery):
 async def callback_settings(callback_query: types.CallbackQuery):
     await callback_query.answer()
     try:
-        await callback_query.message.delete()   # remove the start menu
+        await callback_query.message.delete()
     except Exception:
         pass
     keyboard = build_settings_keyboard(callback_query.from_user.id)
@@ -272,7 +267,6 @@ async def callback_back_to_start(callback_query: types.CallbackQuery):
     except Exception:
         pass
 
-    # Build the original start menu inline keyboard
     keyboard = InlineKeyboardMarkup(row_width=2)
     keyboard.add(
         InlineKeyboardButton("Scan URL", callback_data="scan_url"),
@@ -285,7 +279,6 @@ async def callback_back_to_start(callback_query: types.CallbackQuery):
 async def callback_back_to_start(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
-    # Build the original start menu inline keyboard
     keyboard = InlineKeyboardMarkup(row_width=2)
     keyboard.add(
         InlineKeyboardButton("Scan URL", callback_data="scan_url"),
@@ -312,7 +305,6 @@ async def handle_message(message: types.Message):
 
         soup = data.get("soup")
         if not soup:
-            # If no soup, just send formatted result
             keyboard = InlineKeyboardMarkup()
             keyboard.add(InlineKeyboardButton("⬅️ Back", callback_data="back_to_start_no"))
             if len(formatted) > 4000:
@@ -322,7 +314,7 @@ async def handle_message(message: types.Message):
                 await message.reply(formatted, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=keyboard)
             return
 
-        # Send metadata first
+
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton("⬅️ Back", callback_data="back_to_start_no"))
         if len(formatted) > 4000:
@@ -331,7 +323,7 @@ async def handle_message(message: types.Message):
         else:
             await message.reply(formatted, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=keyboard)
 
-        # Collect images
+
         images = []
         for img in soup.find_all("img", src=True):
             src = img["src"].strip()
@@ -341,7 +333,7 @@ async def handle_message(message: types.Message):
                 images.append(full_url)
         print(f"Collected image URLs: {images}")
 
-        # Collect videos
+
         videos = []
         for video_tag in soup.find_all("video"):
             src = video_tag.get("src")
@@ -349,7 +341,7 @@ async def handle_message(message: types.Message):
                 full_url = urljoin(fetch["url"], src)
                 full_url = full_url.split('?')[0]
                 videos.append(full_url)
-            # Also check for source tags inside video
+
             for source_tag in video_tag.find_all("source", src=True):
                 src = source_tag["src"].strip()
                 if src:
@@ -358,7 +350,7 @@ async def handle_message(message: types.Message):
                     videos.append(full_url)
         print(f"Collected video URLs: {videos}")
 
-        # Collect links to PDF/ZIP/DOCX files
+
         file_extensions = (".pdf", ".zip", ".docx")
         files = []
         for a in soup.find_all("a", href=True):
@@ -370,7 +362,7 @@ async def handle_message(message: types.Message):
 
         settings = get_user_settings(message.from_user.id)
 
-        # Send images messages
+
         if settings.get("send_images") and images:
             image_parts = ["*Images:*"]
             for url_ in images:
@@ -386,7 +378,6 @@ async def handle_message(message: types.Message):
             else:
                 await message.reply(image_message, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=keyboard)
 
-        # Send videos messages
         if settings.get("send_videos") and videos:
             video_parts = ["*Videos:*"]
             for url_ in videos:
@@ -402,7 +393,7 @@ async def handle_message(message: types.Message):
             else:
                 await message.reply(video_message, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=keyboard)
 
-        # Send files messages
+
         if settings.get("send_files") and files:
             file_parts = ["*Files:*"]
             for url_ in files:
