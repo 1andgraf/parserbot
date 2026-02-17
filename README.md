@@ -47,8 +47,8 @@ python app.py
 ## Dependencies
 
 - Python 3.9+
-- [aiogram](https://docs.aiogram.dev/) – Telegram bot framework
-- [httpx](https://www.python-httpx.org/) – HTTP client
-- [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) – HTML parsing
-- [tldextract](https://github.com/john-kurkowski/tldextract) – Domain parsing
-- [phonenumbers](https://github.com/daviddrysdale/python-phonenumbers) – Phone number validation
+- [aiogram](https://docs.aiogram.dev/)
+- [httpx](https://www.python-httpx.org/)
+- [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
+- [tldextract](https://github.com/john-kurkowski/tldextract)
+- [phonenumbers](https://github.com/daviddrysdale/python-phonenumbers)
