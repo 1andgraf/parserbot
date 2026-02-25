@@ -1,17 +1,17 @@
 # Telegram Website Parser Bot
 
-A Telegram bot that parses a website URL and returns emails, phone numbers, social links, metadata, and lists of images, videos, and files. Users can control which content types are returned via settings.
+A Telegram bot that parses a website URL and returns emails, phone numbers, social links, metadata, and lists of images, videos, and files. Users can control which content types are returned using settings.
 
 ## Installation
 
-1. Clone the repository:
+1. Clone the repo:
 
 ```bash
 git clone https://github.com/1andgraf/parserbot.git
 cd parserbot
 ```
 
-2. Create and activate a Python virtual environment:
+2. Python virtual environment:
 
 ```bash
 python3 -m venv venv
@@ -43,12 +43,3 @@ set TELEGRAM_TOKEN="your_bot_token_here"     # Windows
 ```bash
 python app.py
 ```
-
-## Dependencies
-
-- Python 3.9+
-- [aiogram](https://docs.aiogram.dev/)
-- [httpx](https://www.python-httpx.org/)
-- [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
-- [tldextract](https://github.com/john-kurkowski/tldextract)
-- [phonenumbers](https://github.com/daviddrysdale/python-phonenumbers)
